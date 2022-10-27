@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "GR5702 - CC8 - Final Project"
+author: "Ying Hong - Shiyuan Xu - Longcong Xu"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
