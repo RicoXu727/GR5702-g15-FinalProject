@@ -1,6 +1,12 @@
 # Proposal
+At a recent Halloween party, the organizers prepared up to 10 different types of alcohol for the guests, who tasted them one by one, commented on them, and shared their drinking habits as well as their drinking preferences. This inspired our team to explore people's alcohol consumption preferences. After browsing through a number of official government statistics websites, we were very fortunate to find historical records of alcohol consumption in Iowa for 2019 on the Iowa government website. In this dataset, there are as many as 24attributes, which include date of consumption, store name, liquor category, liquor supplier and more, detailing every single alcohol consumption. We wonder if we can discover some of the alcohol consumption preferences of Iowa residents, and if store owners and suppliers might be able to rationalize the wholesale and inventory of alcohol if they are aware of people's preferences.
 
+We will use attributes such as type of liquor, amount spent, etc. to represent people's consumption preferences. For example, we will find out which liquors are the most popular in Iowa and which are the least popular. Which type of alcohol had the highest turnover in 2019. Whether people buy alcohol in large or small quantities.
+
+In addition, detailed geographic information is given in the dataset, which includes the store address, the COUNTY where it is located, and the city where it is located. We want to study the differences in people's alcohol consumption in different regions. For example, at which administrative level is there a difference in alcohol consumption, the City level or the County level or the Zipcode level?
+
+Finally, our dataset also records the time of each alcoholic beverage purchase, with data accurate to the day. We will use the ATTRIBUTE of DATE to explore whether Iowa residents' consumption of alcohol is influenced by season. Whether there are significant cyclical variations in people's consumption of alcohol, etc.
 ## Research topic
-
+Alcohol consumption preferences in Iowa
 ## Data availability
 

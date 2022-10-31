@@ -3,6 +3,8 @@ This is a template for the EDAV final project. It is based on the template creat
 ## log:
 Longcong Xu followed tutorial and changed some .Rmd files on Rstudio 10/27/2022
 
+Longcong Xu updated web to add proposal 10/30/2022
+
 
 ## ABSOLUTE ESSENTIALS
 
