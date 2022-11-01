@@ -1,19 +1,17 @@
 # Proposal
-At a recent Halloween party, the organizers prepared up to 10 different types of alcohol for the guests, who tasted them one by one, commented on them, and shared their drinking habits as well as their drinking preferences. This inspired our team to explore people's alcohol consumption preferences. After browsing through a number of official government statistics websites, we were very fortunate to find historical records of alcohol consumption in Iowa for 2019 on the Iowa government website. In this dataset, there are as many as 24attributes, which include date of consumption, store name, liquor category, liquor supplier and more, detailing every single alcohol consumption. We wonder if we can discover some of the alcohol consumption preferences of Iowa residents, and if store owners and suppliers might be able to rationalize the wholesale and inventory of alcohol if they are aware of people's preferences.
 
-We will use attributes such as type of liquor, amount spent, etc. to represent people's consumption preferences. For example, we will find out which liquors are the most popular in Iowa and which are the least popular. Which type of alcohol had the highest turnover in 2019. Whether people buy alcohol in large or small quantities.
-
-In addition, detailed geographic information is given in the dataset, which includes the store address, the COUNTY where it is located, and the city where it is located. We want to study the differences in people's alcohol consumption in different regions. For example, at which administrative level is there a difference in alcohol consumption, the City level or the County level or the Zipcode level?
-
-Finally, our dataset also records the time of each alcoholic beverage purchase, with data accurate to the day. We will use the ATTRIBUTE of DATE to explore whether Iowa residents' consumption of alcohol is influenced by season. Whether there are significant cyclical variations in people's consumption of alcohol, etc.
 
 ## Research topic
 
-Alcohol consumption preferences in Iowa
+We will use attributes such as Category Name, Sale (Dollars), etc. to represent people's consumption preferences. For example, we will find out which liquors are the most popular in Iowa and which are the least popular. Which type of alcohol had the highest turnover in 2019. Whether people buy alcohol in large or small quantities.
+
+In addition, detailed geographic information is given in the dataset, which includes the store address, the county and the city where it is located. We want to study the differences in people's alcohol consumption in different regions. For example, at which administrative level is there an obvious difference in alcohol consumption, the City level or the County level or the Zipcode level?
+
+Finally, our dataset also records the time of each alcoholic beverage purchase, with data accurate to the day. We will use the Date to explore whether Iowa residents' consumption of alcohol is influenced by season. Whether there are significant cyclical variations in people's consumption of alcohol, etc.
 
 ## Data availability
 
-The dataset consists of 2.38 million points with 24 columns. In this particular project, we will discard the identification information such as “Invoice Number”, “Store Adress”, “Item Number”, etc. 
+In this [2019 Iowa Liquor Sales dataset](https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h), there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis. The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. If we encounter some questions, we can simply submit contact request form in Iowa government website. How to use the data? We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. In this particular project, we will discard the identification information such as “Invoice Number”, “Store Adress”, “Item Number”, etc.
 
 ### Catigorical Data
 
@@ -65,7 +63,7 @@ Volume Sold (Total volume of liquor ordered in liters): column Volume Sold (Lite
 
 Volume Sold: column Volume Sold (Gallons) has a mean of 2.47, a standard deviation of  10.1, a min of 0.0, a median of 1.26, and a max of 3120.53. This column should be a simple linear transformation of the the above column.
 
-(data description is from data course: https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h).
-The dataset was acquired from the state of Iowa's public data platform (link follows below): https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h recording the information on liquor sales in Iowa. 
+(Data description is from [2019 Iowa Liquor Sales dataset](https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h)
+which recording the information on liquor sales in Iowa.)
 
 
