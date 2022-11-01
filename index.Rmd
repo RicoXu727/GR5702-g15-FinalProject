@@ -1,9 +1,9 @@
 --- 
-title: "GR5702 - g15 - Final Project"
+title: "Alcohol consumption preferences in Iowa"
 author: "Ying Hong - Shiyuan Xu - Longcong Xu"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
 # Introduction
-
+This is the final project for GR5702 in Columbia University. 

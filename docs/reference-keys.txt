@@ -2,6 +2,8 @@ introduction
 proposal
 research-topic
 data-availability
+catigorical-data
+numerical-data
 data
 sources
 cleaning-transformation
