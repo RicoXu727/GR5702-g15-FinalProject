@@ -10,14 +10,91 @@ Describe any issues / problems with the data, either known or that you discover.
 
 (suggested: approximately 1 page)
 
+```{r}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+```
+
+```{r warning=False}
+# data <- readr::read_csv("/Users/ricole/Desktop/Leetcode-Note/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/GR5702-g15-FinalProject/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+```
+
+```{r}
+drop <- c("Invoice/Item Number","Address", "Store Location", "Volume Sold (Liters)")
+subdata = data[,!(names(data) %in% drop)]
+```
+
+```{r}
+colSums(is.na(subdata)) %>%
+  sort(decreasing = TRUE)
+```
+
+```{r}
+set.seed(10)
+x <- sampledData <- sample(1:nrow(subdata), 1000)
+headdata <- subdata[x, ]
+```
+
+```{r}
+colnames(headdata)[2] ="StNum"
+colnames(headdata)[3] ="StName"
+colnames(headdata)[6] ="CoNum"
+colnames(headdata)[8] ="Cat"
+colnames(headdata)[9] ="CatName"
+colnames(headdata)[10] ="VenNum"
+colnames(headdata)[11] ="VenName"
+colnames(headdata)[12] ="ItNum"
+colnames(headdata)[13] ="ItDes"
+colnames(headdata)[15] ="BV"
+colnames(headdata)[16] ="SBC"
+colnames(headdata)[17] ="SBR"
+colnames(headdata)[18] ="BS"
+colnames(headdata)[19] ="Sale"
+colnames(headdata)[20] ="VS"
+# headdata <- headdata %>% 
+#             rename("Store Number" = "StNum","Store Name" = "StName", "County Number" = "CoNum", "Category" = "Cat", "Category Name" = "CatName","Vendor Number" = "VenNum","Vendor Name" = "VenName", "Item Number" = "ItNum","Item Description" = "ItDes","Bottle Volumn (ml)" = "BV", "State Bottle Cost" = "SBC","Bottle Sold" = "BS","Sale (Dollars)" = "Sale","Volume Sold (Gallons)" = "VS")
+```
+
+```{r}
+tidydata <- headdata %>% 
+    rownames_to_column("id") %>% 
+    gather(key, value, -id) %>%
+    mutate(missing = ifelse(is.na(value), "yes", "no"))
+```
+
+```{r}
+ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
+  geom_tile(color = "white") +
+  ggtitle("mtcars with NAs added") +
+  ylab('') + 
+  scale_fill_viridis_d() + # discrete scale
+  theme_bw()
+```
+
+```{r}
+newdata <- na.omit(subdata)
+```
+
 ## Cleaning / transformation
 
 Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.)
 
 (suggested: approximately 1/2 page)
 
+```{r}
+
+```
+
 ## Missing value analysis
 
 Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.
 
 (suggested: 2 graphs plus commentary)
+
+```{r}
+
+```
