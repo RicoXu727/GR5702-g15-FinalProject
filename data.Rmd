@@ -2,19 +2,25 @@
 
 ## Sources
 
-Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It's ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)
+(Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It's ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)
 
 Provide some basic information about the data: types of variables, number of records, etc.
 
-Describe any issues / problems with the data, either known or that you discover.
+Describe any issues / problems with the data, either known or that you discover.)
 
 (suggested: approximately 1 page)
 
+In this [2019 Iowa Liquor Sales dataset](%5Bhttps://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h),](<https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h>),) there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis.
+
+The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. If we encounter some questions, we can simply submit contact request form in Iowa government website. How to use the data? We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. In this particular project, we will discard the identification information such as "Invoice Number", "Store Adress", "Item Number", etc.
+
 ## Cleaning / transformation
 
-Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.)
+(Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.))
 
 (suggested: approximately 1/2 page)
+
+Since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload, we first used Python to randomly sample one-tenth of the data as the research data for this project.
 
 ```{r}
 library(dplyr)
@@ -29,14 +35,11 @@ library(forcats)
 data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 ```
 
+Second, we eliminated some redundant column data according to the need of the study.
+
 ```{r}
 drop <- c("Invoice/Item Number","Address", "Store Location", "Volume Sold (Liters)")
 subdata = data[,!(names(data) %in% drop)]
-```
-
-```{r}
-colSums(is.na(subdata)) %>%
-  sort(decreasing = TRUE)
 ```
 
 ```{r}
@@ -44,6 +47,8 @@ set.seed(10)
 x <- sampledData <- sample(1:nrow(subdata), 1000)
 headdata <- subdata[x, ]
 ```
+
+To better present the pattern of missing values on the graph, we rename the column of the data.
 
 ```{r}
 colnames(headdata)[2] ="StNum"
@@ -71,21 +76,24 @@ Describe any patterns you discover in missing values. If no values are missing, 
 
 (suggested: 2 graphs plus commentary)
 
+To explore the presence of missing values, we first coun how many missing values exist for each attribute.
+
 ```{r}
-tidydata <- headdata %>% 
-    rownames_to_column("id") %>% 
-    gather(key, value, -id) %>%
-    mutate(missing = ifelse(is.na(value), "yes", "no"))
+colSums(is.na(subdata)) %>%
+  sort(decreasing = TRUE)
 ```
 
 ```{r}
-ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
-  geom_tile(color = "white") +
-  ggtitle("mtcars with NAs added") +
-  ylab('') + 
-  scale_fill_viridis_d() + 
-  theme_bw()
+library(naniar)
+
+vis_miss(headdata)
 ```
+
+```{r}
+gg_miss_upset(subdata)
+```
+
+We directly delete the data with missing values.
 
 ```{r}
 newdata <- na.omit(subdata)
