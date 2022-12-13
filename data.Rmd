@@ -10,6 +10,12 @@ Describe any issues / problems with the data, either known or that you discover.
 
 (suggested: approximately 1 page)
 
+## Cleaning / transformation
+
+Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.)
+
+(suggested: approximately 1/2 page)
+
 ```{r}
 library(dplyr)
 library(tibble)
@@ -18,7 +24,7 @@ library(ggplot2)
 library(forcats)
 ```
 
-```{r warning=False}
+```{r}
 # data <- readr::read_csv("/Users/ricole/Desktop/Leetcode-Note/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 ```
@@ -59,6 +65,12 @@ colnames(headdata)[20] ="VS"
 #             rename("Store Number" = "StNum","Store Name" = "StName", "County Number" = "CoNum", "Category" = "Cat", "Category Name" = "CatName","Vendor Number" = "VenNum","Vendor Name" = "VenName", "Item Number" = "ItNum","Item Description" = "ItDes","Bottle Volumn (ml)" = "BV", "State Bottle Cost" = "SBC","Bottle Sold" = "BS","Sale (Dollars)" = "Sale","Volume Sold (Gallons)" = "VS")
 ```
 
+## Missing value analysis
+
+Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.
+
+(suggested: 2 graphs plus commentary)
+
 ```{r}
 tidydata <- headdata %>% 
     rownames_to_column("id") %>% 
@@ -71,30 +83,10 @@ ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
   geom_tile(color = "white") +
   ggtitle("mtcars with NAs added") +
   ylab('') + 
-  scale_fill_viridis_d() + # discrete scale
+  scale_fill_viridis_d() + 
   theme_bw()
 ```
 
 ```{r}
 newdata <- na.omit(subdata)
-```
-
-## Cleaning / transformation
-
-Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.)
-
-(suggested: approximately 1/2 page)
-
-```{r}
-
-```
-
-## Missing value analysis
-
-Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.
-
-(suggested: 2 graphs plus commentary)
-
-```{r}
-
 ```
