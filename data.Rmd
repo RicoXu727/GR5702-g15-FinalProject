@@ -20,7 +20,7 @@ library(forcats)
 
 ```{r warning=False}
 # data <- readr::read_csv("/Users/ricole/Desktop/Leetcode-Note/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
-data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/GR5702-g15-FinalProject/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 ```
 
 ```{r}
