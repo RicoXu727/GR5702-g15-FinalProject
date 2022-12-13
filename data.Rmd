@@ -1,8 +1,15 @@
-# Data 
+# Data
 
 ## Sources
+
+Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It's ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)
+
+Provide some basic information about the data: types of variables, number of records, etc.
+
+Describe any issues / problems with the data, either known or that you discover.
+
+(suggested: approximately 1 page)
 
 ## Cleaning / transformation
 
 ## Missing value analysis
-
