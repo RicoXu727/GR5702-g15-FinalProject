@@ -61,70 +61,6 @@
 <script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -160,10 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a></li>
-<li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="interactive-component.html"><a href="interactive-component.html#put-the-line-generator-to-work"><i class="fa fa-check"></i><b>5.1</b> Put the line generator to work</a></li>
-</ul></li>
+<li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -187,100 +120,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="interactive-component" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Interactive component<a href="interactive-component.html#interactive-component" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <script src="https://d3js.org/d3.v7.js"></script>
-<div id="put-the-line-generator-to-work" class="section level2 hasAnchor" number="5.1">
-<h2><span class="header-section-number">5.1</span> Put the line generator to work<a href="interactive-component.html#put-the-line-generator-to-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Now let’s do it the direct way: bind the <em>datum</em> and calculate the path in one step:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="interactive-component.html#cb5-1" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;svg&quot;</span>)<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
-<span id="cb5-2"><a href="interactive-component.html#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">datum</span>(dataset)</span>
-<span id="cb5-3"><a href="interactive-component.html#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> mylinegen)</span>
-<span id="cb5-4"><a href="interactive-component.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;fill&quot;</span><span class="op">,</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb5-5"><a href="interactive-component.html#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;stroke&quot;</span><span class="op">,</span> <span class="st">&quot;teal&quot;</span>)</span>
-<span id="cb5-6"><a href="interactive-component.html#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;stroke-width&quot;</span><span class="op">,</span> <span class="st">&quot;5&quot;</span>)<span class="op">;</span></span></code></pre></div>
-<p>Finally, we’ll add a class and style definitions:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="interactive-component.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span></span>
-<span id="cb6-2"><a href="interactive-component.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.linestyle</span> {</span>
-<span id="cb6-3"><a href="interactive-component.html#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fill</span>: <span class="dv">none</span><span class="op">;</span></span>
-<span id="cb6-4"><a href="interactive-component.html#cb6-4" aria-hidden="true" tabindex="-1"></a>    stroke: <span class="cn">teal</span><span class="op">;</span></span>
-<span id="cb6-5"><a href="interactive-component.html#cb6-5" aria-hidden="true" tabindex="-1"></a>    stroke-width: <span class="dv">5</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb6-6"><a href="interactive-component.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-7"><a href="interactive-component.html#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/style&gt;</span></span></code></pre></div>
-<p>The <code>append("path")</code> line becomes:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="interactive-component.html#cb7-1" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
-<span id="cb7-2"><a href="interactive-component.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">datum</span>(dataset)</span>
-<span id="cb7-3"><a href="interactive-component.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> mylinegen)</span>
-<span id="cb7-4"><a href="interactive-component.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span> <span class="st">&quot;linestyle&quot;</span>)<span class="op">;</span></span></code></pre></div>
-<svg id="noaxes" width="500" height="400">
+<svg id="withaxes" width="600" height="400">
 </svg>
-<style>
-  .linestyle {
-    fill: none;
-    stroke: teal;
-    stroke-width: 5px;
-  }
-</style>
 <script>
-  const w = 500;
-  const h = 400;
-  let svg = d3.select("svg#noaxes");
-  const dataset = [ [0, 60], [1, 43], [2, 43], [3, 56],
-      [4, 45], [5, 62], [6, 49] ];
-  let xScale = d3.scaleBand()
-    .domain(d3.range(dataset.length))
-    .range([0, w]);
-  let yScale = d3.scaleLinear()
-    .domain([d3.min(dataset, d => d[1]) - 20,
-             d3.max(dataset, d => d[1]) + 20])
-    .range([h, 0]);
-  const mylinegen = d3.line()
-    .x(d => xScale(d[0]))
-    .y(d => yScale(d[1]));
-  svg.append("path")
-     .datum(dataset)
-     .attr("d", mylinegen)
-     .attr("class", "linestyle");
-</script>
-<p>Putting it all together, we have:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="interactive-component.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
-<span id="cb8-2"><a href="interactive-component.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;en&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-3"><a href="interactive-component.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;head&gt;</span></span>
-<span id="cb8-4"><a href="interactive-component.html#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;meta</span> <span class="er">charset</span><span class="ot">=</span><span class="st">&quot;utf-8&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-5"><a href="interactive-component.html#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;title&gt;</span>Line generator<span class="kw">&lt;/title&gt;</span></span>
-<span id="cb8-6"><a href="interactive-component.html#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;https://d3js.org/d3.v7.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
-<span id="cb8-7"><a href="interactive-component.html#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;style</span> <span class="er">type</span> <span class="ot">=</span><span class="st">&quot;text/css&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-8"><a href="interactive-component.html#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">.linestyle</span> {</span>
-<span id="cb8-9"><a href="interactive-component.html#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">fill</span>: <span class="dv">none</span><span class="op">;</span></span>
-<span id="cb8-10"><a href="interactive-component.html#cb8-10" aria-hidden="true" tabindex="-1"></a>        stroke: <span class="cn">teal</span><span class="op">;</span></span>
-<span id="cb8-11"><a href="interactive-component.html#cb8-11" aria-hidden="true" tabindex="-1"></a>        stroke-width: <span class="dv">5</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb8-12"><a href="interactive-component.html#cb8-12" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-13"><a href="interactive-component.html#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/style&gt;</span></span>
-<span id="cb8-14"><a href="interactive-component.html#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/head&gt;</span></span>
-<span id="cb8-15"><a href="interactive-component.html#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;body&gt;</span></span>
-<span id="cb8-16"><a href="interactive-component.html#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;script&gt;</span></span>
-<span id="cb8-17"><a href="interactive-component.html#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> w <span class="op">=</span> <span class="dv">500</span><span class="op">;</span></span>
-<span id="cb8-18"><a href="interactive-component.html#cb8-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> h <span class="op">=</span> <span class="dv">400</span><span class="op">;</span></span>
-<span id="cb8-19"><a href="interactive-component.html#cb8-19" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;svg#noaxes&quot;</span>)<span class="op">;</span></span>
-<span id="cb8-20"><a href="interactive-component.html#cb8-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> dataset <span class="op">=</span> [ [<span class="dv">0</span><span class="op">,</span> <span class="dv">60</span>]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">43</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">43</span>]<span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">56</span>]<span class="op">,</span></span>
-<span id="cb8-21"><a href="interactive-component.html#cb8-21" aria-hidden="true" tabindex="-1"></a>          [<span class="dv">4</span><span class="op">,</span> <span class="dv">45</span>]<span class="op">,</span> [<span class="dv">5</span><span class="op">,</span> <span class="dv">62</span>]<span class="op">,</span> [<span class="dv">6</span><span class="op">,</span> <span class="dv">49</span>] ]<span class="op">;</span></span>
-<span id="cb8-22"><a href="interactive-component.html#cb8-22" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span> xScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleBand</span>()</span>
-<span id="cb8-23"><a href="interactive-component.html#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">domain</span>(d3<span class="op">.</span><span class="fu">range</span>(dataset<span class="op">.</span><span class="at">length</span>))</span>
-<span id="cb8-24"><a href="interactive-component.html#cb8-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> w])<span class="op">;</span></span>
-<span id="cb8-25"><a href="interactive-component.html#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span> yScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
-<span id="cb8-26"><a href="interactive-component.html#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">domain</span>([d3<span class="op">.</span><span class="fu">min</span>(dataset<span class="op">,</span> d <span class="kw">=&gt;</span> d[<span class="dv">1</span>]) <span class="op">-</span> <span class="dv">20</span><span class="op">,</span></span>
-<span id="cb8-27"><a href="interactive-component.html#cb8-27" aria-hidden="true" tabindex="-1"></a>                 d3<span class="op">.</span><span class="fu">max</span>(dataset<span class="op">,</span> d <span class="kw">=&gt;</span> d[<span class="dv">1</span>]) <span class="op">+</span> <span class="dv">20</span>])</span>
-<span id="cb8-28"><a href="interactive-component.html#cb8-28" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">range</span>([h<span class="op">,</span> <span class="dv">0</span>])<span class="op">;</span></span>
-<span id="cb8-29"><a href="interactive-component.html#cb8-29" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> mylinegen <span class="op">=</span> d3<span class="op">.</span><span class="fu">line</span>()</span>
-<span id="cb8-30"><a href="interactive-component.html#cb8-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">x</span>(d <span class="kw">=&gt;</span> <span class="fu">xScale</span>(d[<span class="dv">0</span>]))</span>
-<span id="cb8-31"><a href="interactive-component.html#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">y</span>(d <span class="kw">=&gt;</span> <span class="fu">yScale</span>(d[<span class="dv">1</span>]))<span class="op">;</span></span>
-<span id="cb8-32"><a href="interactive-component.html#cb8-32" aria-hidden="true" tabindex="-1"></a>      svg<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
-<span id="cb8-33"><a href="interactive-component.html#cb8-33" aria-hidden="true" tabindex="-1"></a>         <span class="op">.</span><span class="fu">datum</span>(dataset)</span>
-<span id="cb8-34"><a href="interactive-component.html#cb8-34" aria-hidden="true" tabindex="-1"></a>         <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> mylinegen)</span>
-<span id="cb8-35"><a href="interactive-component.html#cb8-35" aria-hidden="true" tabindex="-1"></a>         <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span> <span class="st">&quot;linestyle&quot;</span>)<span class="op">;</span></span>
-<span id="cb8-36"><a href="interactive-component.html#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/script&gt;</span></span>
-<span id="cb8-37"><a href="interactive-component.html#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-38"><a href="interactive-component.html#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/body&gt;</span></span>
-<span id="cb8-39"><a href="interactive-component.html#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+  svg = d3.select("svg#withaxes")
 
-</div>
+  const margin = {top: 20, right: 50, bottom: 30, left: 50}
+
+  const width =  +svg.attr("width") - margin.left - margin.right
+
+  const height = +svg.attr("height") - margin.top - margin.bottom
+
+  const g = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  const parseTime = d3.timeParse("%d-%b-%y");
+
+  xScale = d3.scaleTime().range([0, width]);
+
+  yScale = d3.scaleLinear()
+    .domain([20, 80])
+    .range([height, 0]);
+
+  const xAxis = d3.axisBottom()
+    .scale(xScale)
+    .tickFormat(d3.timeFormat("%m-%d"));
+
+  const line = d3.line()
+    .x(d => xScale(d.date))
+    .y(d => yScale(d.high));
+
+  const data =
+    [{"date":"1-Apr-18","high":60},
+    {"date":"2-Apr-18","high":43},
+    {"date":"3-Apr-18","high":43},
+    {"date":"4-Apr-18","high":56},
+    {"date":"5-Apr-18","high":45},
+    {"date":"6-Apr-18","high":62},
+    {"date":"7-Apr-18","high":49}];
+    data.forEach(function(d) {
+        d.date = parseTime(d.date);
+    });
+
+  xScale
+    .domain(d3.extent(data, d => d.date));
+
+  g.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(xAxis);
+
+  g.append("g")
+    .call(d3.axisLeft(yScale))
+
+  g.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("stroke-width", 1.5)
+    .attr("d", line);
+</script>
+
 </div>
             </section>
 
