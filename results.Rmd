@@ -49,7 +49,7 @@ plot_ly(Sorted_data, x = ~total_amount, y = ~CatName,
                       color = ~-avg_price,
                       mode = 'markers',
                       hovertemplate = paste(Sorted_data$CatName, "<br>Total Sales:",Sorted_data$total_sales, "<br>Total amount:", Sorted_data$total_amount, "<br>Average Price:", Sorted_data$avg_price),
-                      marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sales in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'))
+                      marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sale in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'))
 ```
 
 ```{r}
@@ -77,7 +77,7 @@ filtered_data$BottleSale <- factor(filtered_data$BS)
 stackg <- ggplot(filtered_data, aes(fill = BottleSale, y=BScount, x=CatName)) + 
     geom_bar(position="stack", stat="identity") + 
     # scale_colour_brewer(palette=1, direction=-1) +
-    ggtitle("Large batch of wines") +
+    ggtitle("Wine purchased in large quantities") +
   scale_fill_viridis(option="mako", discrete = T,  direction=-1) + 
     theme_ipsum() + xlab("Category of Wines") + ylab("Count of Bottle Sale")+
   theme(axis.text.x = element_blank(), plot.title = element_text(hjust = 0.5)) 
@@ -100,12 +100,7 @@ Sorted3_data <- grp3_newdata[order(-grp3_newdata$total_sales, -grp3_newdata$tota
 Sorted3_data <- na.omit(Sorted3_data[1:19, ])
 Sorted3_data$total_amount<-round(Sorted3_data$total_amount,3)
 Sorted3_data$avg_price<-round(Sorted3_data$avg_price,3)
-# plot_ly(Sorted3_data, x = ~total_amount, y = ~VenName,
-#                       size = ~total_sales, sizes = c(10, 30),
-#                       color = ~-avg_price,
-#                       mode = 'markers',
-#                       hovertemplate = paste(Sorted3_data$CatName, "<br>Total Sales:",Sorted3_data$total_sales, "<br>Total amount:", Sorted3_data$total_amount, "<br>Average Price:", Sorted3_data$avg_price),
-#                       marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sales in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Vender Name'))
+
 ```
 
 ```{r}
