@@ -52,6 +52,13 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 
@@ -114,15 +121,26 @@
 <h1><span class="header-section-number">Chapter 3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="sources" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Sources<a href="data.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It’s ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)</p>
+<p>(Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It’s ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)</p>
 <p>Provide some basic information about the data: types of variables, number of records, etc.</p>
-<p>Describe any issues / problems with the data, either known or that you discover.</p>
+<p>Describe any issues / problems with the data, either known or that you discover.)</p>
 <p>(suggested: approximately 1 page)</p>
+<p>In this <a href="%5Bhttps://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h">2019 Iowa Liquor Sales dataset</a>,](<a href="https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h" class="uri">https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h</a>),) there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis.</p>
+<p>The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. If we encounter some questions, we can simply submit contact request form in Iowa government website. How to use the data? We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. In this particular project, we will discard the identification information such as “Invoice Number”, “Store Adress”, “Item Number”, etc.</p>
 </div>
 <div id="cleaning-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the <code>.Rmd</code>  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.)</p>
+<p>(Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the <code>.Rmd</code>  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.))</p>
 <p>(suggested: approximately 1/2 page)</p>
+<p>Since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload, we first used Python to randomly sample one-tenth of the data as the research data for this project.</p>
+<p>Second, we eliminated some redundant column data according to the need of the study.</p>
+<p>To better present the pattern of missing values on the graph, we rename the column of the data.</p>
+</div>
+<div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.</p>
+<p>(suggested: 2 graphs plus commentary)</p>
+<p>To explore the presence of missing values, we first coun how many missing values exist for each attribute.</p>
 <pre><code>##                  City              Zip Code         County Number                County              Category 
 ##                   188                   188                   188                   188                   115 
 ##         Category Name          Bottles Sold     State Bottle Cost   State Bottle Retail Volume Sold (Gallons) 
@@ -131,12 +149,9 @@
 ##                     0                     0                     0                     0                     0 
 ##           Item Number      Item Description                  Pack    Bottle Volume (ml)        Sale (Dollars) 
 ##                     0                     0                     0                     0                     0</code></pre>
-</div>
-<div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.</p>
-<p>(suggested: 2 graphs plus commentary)</p>
-<p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>We directly delete the data with missing values.</p>
 
 </div>
 </div>
