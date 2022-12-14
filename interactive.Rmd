@@ -1,3 +1,117 @@
 # Interactive component
 
+<script src="https://d3js.org/d3.v7.js"></script>
 
+## Put the line generator to work
+
+Now let's do it the direct way: bind the *datum* and calculate the path in one step:
+
+``` js
+d3.select("svg").append("path")
+    .datum(dataset)
+    .attr("d", mylinegen)
+    .attr("fill", "none")
+    .attr("stroke", "teal")
+    .attr("stroke-width", "5");
+```
+
+Finally, we'll add a class and style definitions:
+
+``` html
+<style>
+  .linestyle {
+    fill: none;
+    stroke: teal;
+    stroke-width: 5px;
+  }
+</style>
+```
+
+The `append("path")` line becomes:
+
+``` js
+svg.append("path")
+    .datum(dataset)
+    .attr("d", mylinegen)
+    .attr("class", "linestyle");
+```
+
+<svg id="noaxes" width="500" height="400">
+
+</svg>
+
+```{=html}
+<style>
+  .linestyle {
+    fill: none;
+    stroke: teal;
+    stroke-width: 5px;
+  }
+</style>
+```
+```{=html}
+<script>
+  const w = 500;
+  const h = 400;
+  let svg = d3.select("svg#noaxes");
+  const dataset = [ [0, 60], [1, 43], [2, 43], [3, 56],
+      [4, 45], [5, 62], [6, 49] ];
+  let xScale = d3.scaleBand()
+    .domain(d3.range(dataset.length))
+    .range([0, w]);
+  let yScale = d3.scaleLinear()
+    .domain([d3.min(dataset, d => d[1]) - 20,
+             d3.max(dataset, d => d[1]) + 20])
+    .range([h, 0]);
+  const mylinegen = d3.line()
+    .x(d => xScale(d[0]))
+    .y(d => yScale(d[1]));
+  svg.append("path")
+     .datum(dataset)
+     .attr("d", mylinegen)
+     .attr("class", "linestyle");
+</script>
+```
+Putting it all together, we have:
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Line generator</title>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <style type ="text/css">
+      .linestyle {
+        fill: none;
+        stroke: teal;
+        stroke-width: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const w = 500;
+      const h = 400;
+      const svg = d3.select("svg#noaxes");
+      const dataset = [ [0, 60], [1, 43], [2, 43], [3, 56],
+          [4, 45], [5, 62], [6, 49] ];
+      let xScale = d3.scaleBand()
+        .domain(d3.range(dataset.length))
+        .range([0, w]);
+      let yScale = d3.scaleLinear()
+        .domain([d3.min(dataset, d => d[1]) - 20,
+                 d3.max(dataset, d => d[1]) + 20])
+        .range([h, 0]);
+      const mylinegen = d3.line()
+        .x(d => xScale(d[0]))
+        .y(d => yScale(d[1]));
+      svg.append("path")
+         .datum(dataset)
+         .attr("d", mylinegen)
+         .attr("class", "linestyle");
+    </script>
+
+  </body>
+</html>
+```

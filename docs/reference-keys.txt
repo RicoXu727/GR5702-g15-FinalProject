@@ -10,4 +10,5 @@ cleaning-transformation
 missing-value-analysis
 results
 interactive-component
+put-the-line-generator-to-work
 conclusion
