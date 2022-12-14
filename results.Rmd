@@ -1,5 +1,169 @@
 # Results
 
 ```{r}
-head(newdata)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+```
+
+```{r}
+colnames(newdata)[2] ="StNum"
+colnames(newdata)[3] ="StName"
+colnames(newdata)[6] ="CoNum"
+colnames(newdata)[8] ="Cat"
+colnames(newdata)[9] ="CatName"
+colnames(newdata)[10] ="VenNum"
+colnames(newdata)[11] ="VenName"
+colnames(newdata)[12] ="ItNum"
+colnames(newdata)[13] ="ItDes"
+colnames(newdata)[15] ="BV"
+colnames(newdata)[16] ="SBC"
+colnames(newdata)[17] ="SBR"
+colnames(newdata)[18] ="BS"
+colnames(newdata)[19] ="Sale"
+colnames(newdata)[20] ="VS"
+```
+
+```{r}
+colnames(newdata)[9] ="CatName"
+colnames(newdata)[18] ="BS"
+grp_newdata = newdata %>% group_by(CatName)  %>%
+                    summarise(total_sales = sum(BS),
+                              total_amount = sum(Sale),
+                              avg_price = mean(total_amount/total_sales),
+                              .groups = 'drop')
+ 
+Sorted_data <- grp_newdata[order(-grp_newdata$total_sales, -grp_newdata$total_amount),]
+
+```
+
+```{r}
+library(plotly)
+Sorted_data <- Sorted_data[1:21, ]
+Sorted_data$total_amount<-round(Sorted_data$total_amount,3)
+Sorted_data$avg_price<-round(Sorted_data$avg_price,3)
+plot_ly(Sorted_data, x = ~total_amount, y = ~CatName,
+                      size = ~total_sales, sizes = c(10, 30),
+                      color = ~-avg_price,
+                      mode = 'markers',
+                      hovertemplate = paste(Sorted_data$CatName, "<br>Total Sales:",Sorted_data$total_sales, "<br>Total amount:", Sorted_data$total_amount, "<br>Average Price:", Sorted_data$avg_price),
+                      marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sales in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'))
+```
+
+```{r}
+grp2_newdata = newdata %>% group_by(CatName, BS)  %>%
+                    summarise(BScount = sum(BS),
+                              purchase_times = mean(BScount/BS),
+                              .groups = 'drop')
+ 
+Sorted2_data <- grp2_newdata[order(-grp2_newdata$BS),]
+filtered_data <- Sorted2_data[which(Sorted2_data$BScount > 1000 & Sorted2_data$purchase_times > 100 & Sorted2_data$BS > 10),]
+```
+
+```{r}
+library("RColorBrewer") 
+```
+
+```{r, width = 1000, height = 500}
+library(ggplot2)
+library(ggthemes)
+library(hrbrthemes)
+
+library(viridis)
+filtered_data$BottleSale <- factor(filtered_data$BS)
+# col_grid <- rgb(200, 200, 200, 100, maxColorValue = 255)
+stackg <- ggplot(filtered_data, aes(fill = BottleSale, y=BScount, x=CatName)) + 
+    geom_bar(position="stack", stat="identity") + 
+    # scale_colour_brewer(palette=1, direction=-1) +
+    ggtitle("Large batch of wines") +
+  scale_fill_viridis(option="mako", discrete = T,  direction=-1) + 
+    theme_ipsum() + xlab("Category of Wines") + ylab("Count of Bottle Sale")+
+  theme(axis.text.x = element_blank(), plot.title = element_text(hjust = 0.5)) 
+    
+ggplotly(stackg)
+```
+
+```{r, width = 1000, height = 500}
+grp3_newdata = newdata %>% group_by(VenName,CatName)  %>%
+                    summarise(total_sales = sum(BS),
+                              total_amount = sum(Sale),
+                              avg_price = mean(total_amount/total_sales),
+                              .groups = 'drop')
+ 
+Sorted3_data <- grp3_newdata[order(-grp3_newdata$total_sales, -grp3_newdata$total_amount),]
+
+```
+
+```{r}
+Sorted3_data <- na.omit(Sorted3_data[1:19, ])
+Sorted3_data$total_amount<-round(Sorted3_data$total_amount,3)
+Sorted3_data$avg_price<-round(Sorted3_data$avg_price,3)
+# plot_ly(Sorted3_data, x = ~total_amount, y = ~VenName,
+#                       size = ~total_sales, sizes = c(10, 30),
+#                       color = ~-avg_price,
+#                       mode = 'markers',
+#                       hovertemplate = paste(Sorted3_data$CatName, "<br>Total Sales:",Sorted3_data$total_sales, "<br>Total amount:", Sorted3_data$total_amount, "<br>Average Price:", Sorted3_data$avg_price),
+#                       marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sales in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Vender Name'))
+```
+
+```{r}
+grp4_newdata = newdata %>% group_by(VenName)  %>%
+                    summarise(total_sales = sum(BS),
+                              .groups = 'drop')
+ 
+Sorted4_data <- grp4_newdata[order(-grp4_newdata$total_sales),]
+Sorted4_data <- na.omit(Sorted4_data[1:16, ])
+```
+
+```{r, width = 1000, height = 500}
+library(ggraph)
+library(igraph)
+theme_set(theme_void())
+ 
+# data: edge list
+d1 <- data.frame(from="origin", to=Sorted3_data$VenName)
+# d2 <- data.frame(from=Sorted3_data$VenName, to=Sorted3_data$CatName)
+# edges <- rbind(d1, d2)
+primes_list <- list(Sorted3_data$total_sales)
+# We can add a second data frame with information for each node!
+name <- unique(c(d1$from, d1$to))
+print(name)
+# length(d1)
+# length(edges)
+length(name)
+# length(primes_list)
+length(Sorted3_data$total_sales)
+vertices <- data.frame(
+  name=name,
+  value = Sorted4_data$total_sales)
+ 
+# Create a graph object
+mygraph <- graph_from_data_frame( d1, vertices=vertices)
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r, width = 1500, height = 900}
+library(collapsibleTree) 
+cols_f <- colorRampPalette(RColorBrewer::brewer.pal(11, 'Spectral'))
+g2<-ggraph(mygraph, layout = 'dendrogram') + 
+  geom_edge_diagonal() +
+  geom_node_text(aes( label=name, filter=leaf) , angle=70 , hjust=1, nudge_y=-0.1, size=2) +
+  geom_node_point(aes(filter=leaf, size = value, color = value) , alpha=0.6) +
+  ylim(-.6, NA) +
+  scale_fill_viridis(option="mako", discrete = T,  direction=-1)
+g2
+```
+
+```{r}
+
 ```
