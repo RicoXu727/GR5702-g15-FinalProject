@@ -2,7 +2,7 @@
 
 ## Research topic
 
-We will analyze the dataset from three main perspectives. First, we will select some purchase volume indicators to show people's drinking preferences. Then, we will analyze whether preferences differ between regions in Iowa from a geographic perspective. Finally, we will analyze whether people's alcohol consumption follows the seasons from a temporal perspective.
+We will analyze the dataset from three main perspectives. Firstly, we will select some purchase volume indicators to show people's drinking preferences. Then, we will analyze whether preferences differ between regions in Iowa from a geographic perspective. Finally, we will analyze whether people's alcohol consumption follows the seasons from a temporal perspective. 
 
 **People's drinking preferences**
 
