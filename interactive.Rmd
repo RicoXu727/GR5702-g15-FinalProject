@@ -1,9 +1,13 @@
 # Interactive component
 
+```{=html}
 <script src="https://d3js.org/d3.v7.js"></script>
+```
+<svg id="withaxes" width="755" height="800">
 
-<svg id="withaxes" width="600" height="400"></svg>
+</svg>
 
+```{=html}
 <script>
   svg = d3.select("svg#withaxes")
 
@@ -15,33 +19,41 @@
 
   const g = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  const parseTime = d3.timeParse("%d-%b-%y");
+  const parseTime = d3.timeParse("%b");
 
   xScale = d3.scaleTime().range([0, width]);
 
   yScale = d3.scaleLinear()
-    .domain([20, 80])
+    .domain([50, 120])
     .range([height, 0]);
 
   const xAxis = d3.axisBottom()
     .scale(xScale)
-    .tickFormat(d3.timeFormat("%m-%d"));
+    .tickFormat(d3.timeFormat("%m"));
 
   const line = d3.line()
     .x(d => xScale(d.date))
     .y(d => yScale(d.high));
 
-  const data =
-    [{"date":"1-Apr-18","high":60},
-    {"date":"2-Apr-18","high":43},
-    {"date":"3-Apr-18","high":43},
-    {"date":"4-Apr-18","high":56},
-    {"date":"5-Apr-18","high":45},
-    {"date":"6-Apr-18","high":62},
-    {"date":"7-Apr-18","high":49}];
+ const data =
+    [{"date":"Jan","high":78.435},
+    {"date":"Feb","high":80.8},
+    {"date":"Mar","high":79.6},
+    {"date":"Apr","high":90.3},
+    {"date":"May","high":103.4},
+    {"date":"Jun","high":94.4},
+    {"date":"July","high":102.2},
+    {"date":"Aug","high":96.9},
+    {"date":"Sep","high":92.8},
+    {"date":"Oct","high":102.6},
+    {"date":"Nov", "high":96.0},
+    {"date":"Dec", "high":107.7}];
+    
     data.forEach(function(d) {
         d.date = parseTime(d.date);
     });
+
+
 
   xScale
     .domain(d3.extent(data, d => d.date));
@@ -58,6 +70,36 @@
     .attr("class", "line")
     .attr("fill", "none")
     .attr("stroke", "red")
-    .attr("stroke-width", 1.5)
+    .attr("stroke-width", 0)
     .attr("d", line);
+    
+  const dataset = [{s: 0, sw: 450}, {s: 60, sw: 430}, {s: 120, sw: 440}, {s: 180, sw: 320}, {s: 240, sw: 190}, {s: 300, sw: 290}, {s: 360, sw: 210}, {s: 420, sw: 265}, {s: 480, sw: 300}, {s: 540, sw: 200}, {s: 600, sw: 260}, {s: 660, sw: 150}];
+  const circ = d3.select("g").selectAll("circle").data(dataset);
+  circ.enter()
+      .append("circle")
+        .attr("cx", d => d.s)
+        .attr("cy", d => 750)
+        .attr("r", "8")
+        .attr("fill", "orange");
+  
+  d3.select("g")
+  .on("click", function(event) {
+    d3.select("g")
+  .selectAll("circle")
+  .transition()
+  .duration(2000)
+  .attr("cy", d => d.sw);
+      });
+      
+  d3.select("svg")
+  .on("click", function () {
+    d3.select("svg")
+      .append("text")
+        .attr("x", "250")
+        .attr("y", "30")
+        .text("Total Bottles Sold by Month")
+        .style("font-size", "2em");
+        });
+    
 </script>
+```

@@ -1,3 +1,7 @@
+---
+---
+---
+
 # Results
 
 ```{r}
@@ -6,6 +10,19 @@ library(tibble)
 library(tidyr)
 library(ggplot2)
 library(forcats)
+```
+
+```{r}
+mydata <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+```
+
+```{r}
+drop <- c("Invoice/Item Number","Address", "Store Location", "Volume Sold (Liters)")
+subdata = mydata[,!(names(mydata) %in% drop)]
+```
+
+```{r}
+newdata <- na.omit(subdata)
 ```
 
 ```{r}
@@ -30,7 +47,7 @@ colnames(newdata)[20] ="VS"
 colnames(newdata)[9] ="CatName"
 colnames(newdata)[18] ="BS"
 grp_newdata = newdata %>% group_by(CatName)  %>%
-                    summarise(total_sales = sum(BS),
+                    dplyr::summarise(total_sales = sum(BS),
                               total_amount = sum(Sale),
                               avg_price = mean(total_amount/total_sales),
                               .groups = 'drop')
@@ -46,15 +63,15 @@ Sorted_data$total_amount<-round(Sorted_data$total_amount,3)
 Sorted_data$avg_price<-round(Sorted_data$avg_price,3)
 plot_ly(Sorted_data, x = ~total_amount, y = ~CatName,
                       size = ~total_sales, sizes = c(10, 30),
-                      color = ~-avg_price,
+                      color = ~avg_price,
                       mode = 'markers',
                       hovertemplate = paste(Sorted_data$CatName, "<br>Total Sales:",Sorted_data$total_sales, "<br>Total amount:", Sorted_data$total_amount, "<br>Average Price:", Sorted_data$avg_price),
-                      marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sale in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'))
+                      marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sale in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'), legend=list(title=list(text='<b>Trend</b>')))
 ```
 
 ```{r}
 grp2_newdata = newdata %>% group_by(CatName, BS)  %>%
-                    summarise(BScount = sum(BS),
+                    dplyr::summarize(BScount = sum(BS),
                               purchase_times = mean(BScount/BS),
                               .groups = 'drop')
  
@@ -85,80 +102,380 @@ stackg <- ggplot(filtered_data, aes(fill = BottleSale, y=BScount, x=CatName)) +
 ggplotly(stackg)
 ```
 
-```{r, width = 1000, height = 500}
-grp3_newdata = newdata %>% group_by(VenName,CatName)  %>%
-                    summarise(total_sales = sum(BS),
-                              total_amount = sum(Sale),
-                              avg_price = mean(total_amount/total_sales),
-                              .groups = 'drop')
- 
-Sorted3_data <- grp3_newdata[order(-grp3_newdata$total_sales, -grp3_newdata$total_amount),]
+```{r}
+library(openintro)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(vcdExtra)
+library(forcats)
+```
+
+\## Including Plots
+
+```{r}
+data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+data<- na.omit(data)
+```
+
+frist group by county
+
+```{r pressure}
+#df_county <- data %>% group_by(data$County)
+tb_county <- table(data$County)
+#tb_county
+tb_city <- table(data$City)
+#tb_city
+tb_caat_name <- table(data$"Category Name")
+#tb_caat_name
+names(data)
+```
+
+select geo-related cols
+
+```{r}
+df_geo <- select(data, County, "Category Name", "Bottle Volume (ml)", Pack, "Bottles Sold", "Sale (Dollars)", "Volume Sold (Gallons)" )
+df_geo
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r fig.height = 8}
+df_bottle_by_county <- df_geo%>% group_by(County) %>% dplyr::summarise(num_bottle_sold = sum(df_geo["Bottles Sold"]))
+
+#ggplot(df_bottle_by_county, aes( x = fct_reorder(County, num_bottle_sold), y = num_bottle_sold)) + geom_point() + 
+#  coord_flip()
+```
+
+```{r}
+df_bottle_sell <- df_geo%>% group_by(County) %>% dplyr::summarise(bottle_sold_100 = sum(`Bottles Sold`)/100, dollar_100 = sum(`Sale (Dollars)`)/100, volume = sum(`Volume Sold (Gallons)`))
+# keep top 30
+df_bottle_sell <- df_bottle_sell %>% slice_max(order_by = `bottle_sold_100`, n = 30)
+#prepare data into three different dfs for later concatenation and plotting
+df_bottle <- select(df_bottle_sell, County, value = bottle_sold_100) %>% add_column(type = "bottle_in_100")
+df_dollar <- select(df_bottle_sell, County, value = dollar_100) %>% add_column(type = "dollars_in_100")
+df_volume <- select(df_bottle_sell, County, value = volume) %>% add_column(type = "gallons")
+df_b_d_v_for_plot <- rbind(df_bottle, df_dollar, df_volume)
+df_b_d_v_for_plot
+df_dollar
+
+ggplot(df_b_d_v_for_plot, aes(x = fct_reorder(County, value), y = value, color = type)) + geom_point()+ coord_flip()
+
+```
+
+check by alcohol category
+
+```{r fig.height = 6}
+df_geo_cat <- df_geo%>% group_by(County, `Category Name`) %>% dplyr::summarise(bottle_sold = sum(`Bottles Sold`), dollar_100 = sum(`Sale (Dollars)`)/100, volume = sum(`Volume Sold (Gallons)`))
+#order the dataframe in descending order in the number of bottles sold.
+df_geo_cat_order <- df_geo_cat[order( df_geo_cat[,1], -df_geo_cat[,3] ),]
+df_geo_cat_order
+
+unique_county <- unique(data$County, decreasing=TRUE)
+#in attempt to keep the data clean, we will plot only the top 5 most sold category
+df_top_cat <- data.frame()
+for (x in unique_county) {
+  temp <- filter(df_geo_cat_order, `County` == x)
+  if (nrow(temp) >= 3){
+    df_top_cat <- rbind(df_top_cat, temp[1:3,])
+  }
+}
+
+#since we only plot the top 30 countries, we must first find the top 30 counties with the most bottle sells.
+df_count <-df_top_cat %>% group_by(County) %>% dplyr::summarise(count = sum(bottle_sold)) %>% slice_max(order_by = `count`, n = 30)
+df_count
+
+unique_county <- unique(df_count$County, decreasing=TRUE)
+unique_county
+df_stacked_bar <- data.frame()
+for (x in unique_county) {
+  temp <- filter(df_geo_cat_order, `County` == x)
+  if (nrow(temp) >= 3){
+    df_stacked_bar <- rbind(df_stacked_bar, temp[1:3,])
+  }
+}
+
+#reorder the data from high to low 
+df_stacked_bar$County <- reorder(df_stacked_bar$County, df_stacked_bar$bottle_sold) 
+# plot skacked plot
+ggplot(df_stacked_bar, aes(fill= `Category Name`, y=bottle_sold, x=County)) + 
+    geom_bar(position="stack", stat="identity") + coord_flip()
+```
+
+```{r fig.height = 6}
+# library(GGally)
+# library(ggplot2)
+# # df_bottle_sell_vol_para_plot <- df_geo%>% group_by(County) %>% summarize(bottle_sold = sum(`Bottles Sold`), dollar = sum(`Sale (Dollars)`), volume = sum(`Volume Sold (Gallons)`))
+# df_bottle_sell_vol_para_plot <- df_geo%>% group_by(County) %>% summarise(bottle_sold = sum(`Bottles Sold`), dollar = sum(`Sale (Dollars)`), volume = sum(`Volume Sold (Gallons)`))
+# 
+# ggparcoord(df_bottle_sell_vol_para_plot, columns = 2:4,splineFactor = 10, alpha = 0.4, scale = "uniminmax")
+```
+
+```{r fig.height = 6}
+#df_top5_cat$County_re <- reorder(df_top5_cat$County, group_by(df_top5_cat)%>% summarize(bottle_sold))
+
+# ggplot(df_top5_cat, aes(fill= `Category Name`, y=bottle_sold, x=County)) + 
+#     geom_bar(position="stack", stat="identity") + coord_flip()
+```
+
+```{r}
+df_bottle_sell
+
+```
+
+install.packages('devtools')
+
+install usmap
+
+```{r}
+library(usmap)
+library(ggplot2)
+#install_dev(“UrbanInstitute/urbnmapr”)
+
+plot_usmap("counties", include = 'IA')
+```
+
+```{r}
+df_bottle_sell_vol_para_plot <- df_bottle_sell
+colnames(df_bottle_sell_vol_para_plot)[1] ="fips"
+
+df_bottle_sell_vol_para_plot[[1]] <- tolower(df_bottle_sell_vol_para_plot[[1]])
+
+print(!is.null(c()))
+fips("IA", county = "pottawattamie")
+df_bottle_sell_vol_para_plot <- data.frame(df_bottle_sell_vol_para_plot, stringsAsFactors = FALSE)
+
+#4 wrong county names
+
+df_bottle_sell_vol_para_plot
+```
+
+```{r}
+library(usmap)
+library(ggplot2)
+
+df_bottle_sell_vol_para_plot <- df_geo%>% group_by(County) %>% dplyr::summarise(bottle_sold = sum(`Bottles Sold`), dollar = sum(`Sale (Dollars)`), volume = sum(`Volume Sold (Gallons)`))
+
+#rename and to lower case
+colnames(df_bottle_sell_vol_para_plot)[1] ="fips"
+df_bottle_sell_vol_para_plot[[1]] <- tolower(df_bottle_sell_vol_para_plot[[1]])
+
+#make 2 lists containing code name and english name for each county
+df_bottle_sell_vol_para_plot <- na.omit(df_bottle_sell_vol_para_plot)
+h <- unique(df_bottle_sell_vol_para_plot$fips)
+dict_replace <- c()
+dict_replace_from <- c()
+for (i in 1:length(h)){
+  if (h[i]=="buena vist") {
+    dict_replace <- append(dict_replace, c(fips("IA", county = "buena vista")))
+    dict_replace_from <- append(dict_replace_from, h[i])
+  } else if (h[i]=="cerro gord") {
+    dict_replace <- append(dict_replace, c(fips("IA", county = "cerro gordo")))
+    dict_replace_from <- append(dict_replace_from, h[i])
+  } else if (h[i]=="obrien") {
+    dict_replace <- append(dict_replace, c(fips("IA", county = "o'brien")))
+    dict_replace_from <- append(dict_replace_from, h[i])
+  } else if (h[i]=="pottawatta") {
+    dict_replace <- append(dict_replace, c(fips("IA", county = "Pottawattamie")))
+    dict_replace_from <- append(dict_replace_from, h[i])
+  } else if (is.na(h[i]) == FALSE) {
+    code <- c(fips("IA", county = h[i]))
+    dict_replace <- append(dict_replace, code)
+    dict_replace_from <- append(dict_replace_from, h[i])
+  }
+}
+
+#make replacement from english county name to code name
+library(plyr)
+for (i in 1:length(dict_replace)){
+  df_bottle_sell_vol_para_plot[df_bottle_sell_vol_para_plot == dict_replace_from[i]] <- dict_replace[i]
+}
+
+#draw plot, use usmap package
+plot_usmap(data = df_bottle_sell_vol_para_plot, values = "dollar", include = c("IA"), color = "blue") + 
+  scale_fill_continuous(low = "white", high = "blue", name = "dollar", label = scales::comma) + 
+  labs(title = "Iowa by County", subtitle = "Sells in Dollars") +
+  theme(legend.position = "right")
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
+```
+
+```{r}
+# change to date class
+date_in_date <- as.Date(data$Date, format = "%m/%d/%Y")
+data_new <- cbind(data, date_in_date)
+date_unique <- unique(data_new$date_in_date)
+```
+
+```{r}
+bottles <- c()
+
+for (i in date_unique) {
+  index <- data_new$date_in_date == i
+  total <- sum(data_new$`Bottles Sold`[index], na.rm = TRUE)
+  bottles <- append(bottles,total)
+}
+
+df_bottles <- data.frame(
+  "date_unique" = date_unique,
+  "total_bottles" = bottles
+)
+```
+
+```{r}
+library(lubridate)
+library(ggplot2)
+
+g <- ggplot(df_bottles, aes(date_unique, total_bottles)) +
+  geom_point() +
+  ggtitle("Total Bottles Sold by Date in 2019")+
+  labs (x = "date", y = "bottles")
+
+g +
+  geom_line(color = "grey30") +
+  geom_smooth(color = "blue", se = FALSE)
+```
+
+```{r}
+library(plotly)
+
+p <- plot_ly(
+  df_bottles, x = ~date_unique, y = ~total_bottles,
+  type = "scatter",
+  mode = "line+markers",
+  hoverinfo = "text"
+)
+
+p
+```
+
+```{r}
+mon <- c()
+
+for (i in 1:length(date_unique)) {
+  mon <- append(mon, months(date_unique[i]))
+}
+
+df_bottles <- cbind(df_bottles, "month" = c(mon))
+
+
+month_bottles <- c()
+
+for (i in c(month.name)) {
+  index <- df_bottles$month == i
+  total <- sum(df_bottles$total_bottles[index], na.rm = TRUE)
+  month_bottles <- append(month_bottles,total)
+}
+
+df_bottles_month <- data.frame(
+  "month" = month.name,
+  "total_bottles" =  month_bottles
+)
+
+df_bottles_month$month <- factor(df_bottles_month$month, levels = unique(df_bottles_month$month), ordered = TRUE)
+
+
+ggplot(df_bottles_month, aes(month, total_bottles, group=1)) +
+  geom_line() +
+  ggtitle("Total Bottles Sold by Month in 2019") +
+  labs (x = "month", y = "bottles") +
+  geom_smooth(method = "loess", span = .75, se = FALSE, lwd = 1.5)+
+  theme(axis.text.x = element_text(angle=45))
 
 ```
 
 ```{r}
-Sorted3_data <- na.omit(Sorted3_data[1:19, ])
-Sorted3_data$total_amount<-round(Sorted3_data$total_amount,3)
-Sorted3_data$avg_price<-round(Sorted3_data$avg_price,3)
+g <- ggplot(df_bottles, aes(date_unique, total_bottles)) + geom_line() +
+  ggtitle("Bottles sold on Fridays") +
+  labs (x = "date", y = "bottles")
+
+friday <- df_bottles |> filter(wday(date_unique) == 6)
+
+g + geom_point(data = friday, aes(date_unique, total_bottles),
+               color = "deeppink")
+```
+
+```{r}
+ggplot(df_bottles, aes(date_unique, total_bottles)) +
+  geom_line() +
+  facet_grid(wday(date_unique, label = TRUE)) +
+  ggtitle("Total Bottles Sold by Date in 2019")+
+  labs (x = "date", y = "bottles")
 
 ```
 
 ```{r}
-grp4_newdata = newdata %>% group_by(VenName)  %>%
-                    summarise(total_sales = sum(BS),
-                              .groups = 'drop')
- 
-Sorted4_data <- grp4_newdata[order(-grp4_newdata$total_sales),]
-Sorted4_data <- na.omit(Sorted4_data[1:16, ])
-```
+df_december <- filter(df_bottles, month == "December")
+df_november <- filter(df_bottles, month == "November")
+df_nov_dec <- rbind(df_november, df_december)
 
-```{r, width = 1000, height = 500}
-library(ggraph)
-library(igraph)
-theme_set(theme_void())
- 
-# data: edge list
-d1 <- data.frame(from="origin", to=Sorted3_data$VenName)
-# d2 <- data.frame(from=Sorted3_data$VenName, to=Sorted3_data$CatName)
-# edges <- rbind(d1, d2)
-primes_list <- list(Sorted3_data$total_sales)
-# We can add a second data frame with information for each node!
-name <- unique(c(d1$from, d1$to))
-print(name)
-# length(d1)
-# length(edges)
-length(name)
-# length(primes_list)
-length(Sorted3_data$total_sales)
-vertices <- data.frame(
-  name=name,
-  value = Sorted4_data$total_sales)
- 
-# Create a graph object
-mygraph <- graph_from_data_frame( d1, vertices=vertices)
+g <- ggplot(df_nov_dec, aes(date_unique, total_bottles)) +
+  geom_line(color = "deeppink") +
+  geom_point(color = "deeppink") +
+  scale_y_continuous(limits = c(0,7000)) +
+  geom_smooth() +
+  ggtitle("Bottles Sold in November & December in 2019") +
+  labs(x = "day", y = "bottle")
 
-```
-
-```{r}
+start <- as.Date("2019-12-24")
+end <- as.Date("2019-12-31")
+g + annotate("rect", 
+             xmin = as.Date("2019-12-24"), 
+             xmax = as.Date("2019-12-31"),
+             ymin = -Inf, ymax = Inf, fill = "green",
+             alpha = 0.2) +
+  annotate("text",, x = as.Date("2019-12-24") -8,
+           y = 6800, label = "Dec 24 - Dec 31",
+           color = "green", hjust = 0) +
+  annotate("rect", 
+           xmin = as.Date("2019-11-23"), 
+           xmax = as.Date("2019-11-27"),
+           ymin = -Inf, ymax = Inf, fill = "blue",
+           alpha = 0.2) +
+  annotate("text",, x = as.Date("2019-11-23"),
+           y = 6800, label = "Nov 23 - Nov 27",
+           color = "blue", hjust = 0) +
+  theme_classic()
 
 ```
 
 ```{r}
+mon <- c()
 
-```
+for (i in 1:length(date_in_date)) {
+  mon <- append(mon, months(date_in_date[i]))
+}
 
-```{r, width = 1500, height = 900}
-library(collapsibleTree) 
-cols_f <- colorRampPalette(RColorBrewer::brewer.pal(11, 'Spectral'))
-g2<-ggraph(mygraph, layout = 'dendrogram') + 
-  geom_edge_diagonal() +
-  geom_node_text(aes( label=name, filter=leaf) , angle=70 , hjust=1, nudge_y=-0.1, size=2) +
-  geom_node_point(aes(filter=leaf, size = value, color = value) , alpha=0.6) +
-  ylim(-.6, NA) +
-  scale_fill_viridis(option="mako", discrete = T,  direction=-1)
-g2
+data_new <- cbind(data_new, "month" = c(mon))
+
+cate <- unique(data_new$`Category Name`)
+
+df_para <- data.frame(
+  "category" = cate
+)
+
+
+for (i in 1:12) {
+  mon <- c()
+  df_mon <- filter(data_new, month == month.name[i])
+  for (j in 1:length(cate)) {
+  index <- df_mon$`Category Name` == cate[j]
+  total <- sum(df_mon$`Bottles Sold`[index], na.rm = TRUE)
+  mon <- append(mon,total)
+  }
+  df_para <- cbind(df_para, mon)
+}
 ```
 
 ```{r}
-
+library(GGally)
+colnames(df_para) <- c("category", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+ggparcoord(df_para)
 ```

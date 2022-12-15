@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Interactive component | Alcohol consumption preferences in Iowa</title>
-  <meta name="description" content="Chapter 6 Interactive component | Alcohol consumption preferences in Iowa" />
+  <title>Chapter 5 install.packages(‘devtools’) | Alcohol consumption preferences in Iowa</title>
+  <meta name="description" content="Chapter 5 install.packages(‘devtools’) | Alcohol consumption preferences in Iowa" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Interactive component | Alcohol consumption preferences in Iowa" />
+  <meta property="og:title" content="Chapter 5 install.packages(‘devtools’) | Alcohol consumption preferences in Iowa" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Interactive component | Alcohol consumption preferences in Iowa" />
+  <meta name="twitter:title" content="Chapter 5 install.packages(‘devtools’) | Alcohol consumption preferences in Iowa" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="install.html"/>
-<link rel="next" href="conclusion.html"/>
+<link rel="prev" href="results.html"/>
+<link rel="next" href="interactive-component.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -118,105 +118,44 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="interactive-component" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Interactive component<a href="interactive-component.html#interactive-component" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<script src="https://d3js.org/d3.v7.js"></script>
-<svg id="withaxes" width="755" height="800">
-</svg>
-<script>
-  svg = d3.select("svg#withaxes")
-
-  const margin = {top: 20, right: 50, bottom: 30, left: 50}
-
-  const width =  +svg.attr("width") - margin.left - margin.right
-
-  const height = +svg.attr("height") - margin.top - margin.bottom
-
-  const g = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-  const parseTime = d3.timeParse("%b");
-
-  xScale = d3.scaleTime().range([0, width]);
-
-  yScale = d3.scaleLinear()
-    .domain([50, 120])
-    .range([height, 0]);
-
-  const xAxis = d3.axisBottom()
-    .scale(xScale)
-    .tickFormat(d3.timeFormat("%m"));
-
-  const line = d3.line()
-    .x(d => xScale(d.date))
-    .y(d => yScale(d.high));
-
- const data =
-    [{"date":"Jan","high":78.435},
-    {"date":"Feb","high":80.8},
-    {"date":"Mar","high":79.6},
-    {"date":"Apr","high":90.3},
-    {"date":"May","high":103.4},
-    {"date":"Jun","high":94.4},
-    {"date":"July","high":102.2},
-    {"date":"Aug","high":96.9},
-    {"date":"Sep","high":92.8},
-    {"date":"Oct","high":102.6},
-    {"date":"Nov", "high":96.0},
-    {"date":"Dec", "high":107.7}];
-    
-    data.forEach(function(d) {
-        d.date = parseTime(d.date);
-    });
-
-
-
-  xScale
-    .domain(d3.extent(data, d => d.date));
-
-  g.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(xAxis);
-
-  g.append("g")
-    .call(d3.axisLeft(yScale))
-
-  g.append("path")
-    .datum(data)
-    .attr("class", "line")
-    .attr("fill", "none")
-    .attr("stroke", "red")
-    .attr("stroke-width", 0)
-    .attr("d", line);
-    
-  const dataset = [{s: 0, sw: 450}, {s: 60, sw: 430}, {s: 120, sw: 440}, {s: 180, sw: 320}, {s: 240, sw: 190}, {s: 300, sw: 290}, {s: 360, sw: 210}, {s: 420, sw: 265}, {s: 480, sw: 300}, {s: 540, sw: 200}, {s: 600, sw: 260}, {s: 660, sw: 150}];
-  const circ = d3.select("g").selectAll("circle").data(dataset);
-  circ.enter()
-      .append("circle")
-        .attr("cx", d => d.s)
-        .attr("cy", d => 750)
-        .attr("r", "8")
-        .attr("fill", "orange");
-  
-  d3.select("g")
-  .on("click", function(event) {
-    d3.select("g")
-  .selectAll("circle")
-  .transition()
-  .duration(2000)
-  .attr("cy", d => d.sw);
-      });
-      
-  d3.select("svg")
-  .on("click", function () {
-    d3.select("svg")
-      .append("text")
-        .attr("x", "250")
-        .attr("y", "30")
-        .text("Total Bottles Sold by Month")
-        .style("font-size", "2em");
-        });
-    
-</script>
+<div id="install.packagesdevtools" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> install.packages(‘devtools’)<a href="install.html#install.packagesdevtools" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>install usmap</p>
+<p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] &quot;19155&quot;</code></pre>
+<pre><code>##          fips bottle_sold_100 dollar_100   volume
+## 1        polk         2232.15 29468.6685 45139.36
+## 2        linn          948.46 11722.9802 19873.47
+## 3       scott          775.01  9432.5842 15360.11
+## 4  black hawk          685.79  7908.0374 13221.75
+## 5     johnson          543.94  7778.8321 12624.14
+## 6    woodbury          430.47  5274.0121  8713.44
+## 7  pottawatta          390.41  5159.7299  8369.91
+## 8       story          248.63  3638.0693  6135.94
+## 9  cerro gord          239.41  3133.2310  5991.23
+## 10    dubuque          239.05  3216.3971  5430.03
+## 11     dallas          160.57  2733.4192  4141.05
+## 12    webster          154.52  1846.8317  3388.43
+## 13  muscatine          147.45  1675.7291  2842.56
+## 14 des moines          144.33  1750.6705  2976.77
+## 15   marshall          136.13  1802.8206  2924.99
+## 16    clinton          130.50  1604.5010  2981.50
+## 17        lee          129.67  1716.0825  3231.69
+## 18  dickinson          114.06  1656.6805  2874.33
+## 19    wapello           94.10  1077.2274  1753.18
+## 20     marion           71.50   907.0488  1565.58
+## 21     jasper           70.47   784.3259  1338.15
+## 22      boone           68.31   941.4461  1531.64
+## 23      henry           60.87   831.2411  1378.66
+## 24 washington           59.35   782.6217  1306.72
+## 25     bremer           57.52   775.8921  1479.03
+## 26 buena vist           55.99   755.1428  1343.77
+## 27    carroll           55.93   784.6769  1422.80
+## 28    kossuth           54.72   786.0217  1425.12
+## 29     obrien           54.00   861.5931  1551.28
+## 30   plymouth           53.03   687.1619  1301.88</code></pre>
+<p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 
 </div>
             </section>
@@ -224,8 +163,8 @@
           </div>
         </div>
       </div>
-<a href="install.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="conclusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interactive-component.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -256,7 +195,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/RicoXu727/GR5702-g15-FinalProject/edit/main/interactive.Rmd",
+"link": "https://github.com/RicoXu727/GR5702-g15-FinalProject/edit/main/results.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -264,7 +203,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/RicoXu727/GR5702-g15-FinalProject/blob/main/interactive.Rmd",
+"link": "https://github.com/RicoXu727/GR5702-g15-FinalProject/blob/main/results.Rmd",
 "text": null
 },
 "download": null,
