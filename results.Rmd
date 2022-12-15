@@ -1,6 +1,6 @@
----
----
----
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 
 # Results
 
@@ -56,6 +56,8 @@ Sorted_data <- grp_newdata[order(-grp_newdata$total_sales, -grp_newdata$total_am
 
 ```
 
+To explore the drinking preferences of the people of Iowa, we identified the twenty best-selling wines in Iowa. We chose a bubble chart to show as much data as possible. In a bubble chart, we can use horizontal and vertical coordinates, bubble color, and bubble size to present as much data as possible. Furthermore, we use plotly to generate interaction function.
+
 ```{r}
 library(plotly)
 Sorted_data <- Sorted_data[1:21, ]
@@ -68,6 +70,8 @@ plot_ly(Sorted_data, x = ~total_amount, y = ~CatName,
                       hovertemplate = paste(Sorted_data$CatName, "<br>Total Sales:",Sorted_data$total_sales, "<br>Total amount:", Sorted_data$total_amount, "<br>Average Price:", Sorted_data$avg_price),
                       marker = list(opacity = 0.7,sizemode = "diameter")) %>% add_markers()%>%layout(title = 'Top 20 Wine Sale in Iowa', xaxis = list(title = 'Total_sales'), yaxis = list(title = 'Category Name'), legend=list(title=list(text='<b>Trend</b>')))
 ```
+
+The graph shows that Iowa residents have a clear preference for American Vodkas and Canadian Whiskies. These two wines are far ahead of other brands in terms of sales. All other wine sales are concentrated within a range of approximately 1M. Secondly, the factor of price does not play a very significant role in the consumption of alcohol. The high sales volume like Canadian Whiskies, it is not cheap the average price is 14.439. Some cheaper wines, such as American Dry Gin, Blended Whiskies, are no more popular than 100% Agave Tequila.
 
 ```{r}
 grp2_newdata = newdata %>% group_by(CatName, BS)  %>%
@@ -82,6 +86,8 @@ filtered_data <- Sorted2_data[which(Sorted2_data$BScount > 1000 & Sorted2_data$p
 ```{r}
 library("RColorBrewer") 
 ```
+
+Then, we wanted to know which wines are good for bulk purchases as well as family gatherings in Iowa. Is the reason for the high sales in the previous chart a large volume purchase?
 
 ```{r, width = 1000, height = 500}
 library(ggplot2)
@@ -102,6 +108,8 @@ stackg <- ggplot(filtered_data, aes(fill = BottleSale, y=BScount, x=CatName)) +
 ggplotly(stackg)
 ```
 
+In this graph, American Vodkas and Canadian Whiskies unsurprisingly leads the pack, except that Whiskies Liqueur is the newest popular object and people like to buy them in bulk. The barchat shows, respectively, how many bottles of this wine people buy at a time. In terms of purchase volume, Whiskies Liqueur is the most likely to be bought in groups, people often buy 96 bottles at a time. In general, bulk purchases are not very common, and buying 12 bottles at a time is a favorite.
+
 ```{r}
 library(openintro)
 library(ggplot2)
@@ -111,14 +119,10 @@ library(vcdExtra)
 library(forcats)
 ```
 
-\## Including Plots
-
 ```{r}
 data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 data<- na.omit(data)
 ```
-
-frist group by county
 
 ```{r pressure}
 #df_county <- data %>% group_by(data$County)
@@ -127,15 +131,11 @@ tb_county <- table(data$County)
 tb_city <- table(data$City)
 #tb_city
 tb_caat_name <- table(data$"Category Name")
-#tb_caat_name
-names(data)
 ```
-
-select geo-related cols
 
 ```{r}
 df_geo <- select(data, County, "Category Name", "Bottle Volume (ml)", Pack, "Bottles Sold", "Sale (Dollars)", "Volume Sold (Gallons)" )
-df_geo
+# df_geo
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
@@ -156,20 +156,22 @@ df_bottle <- select(df_bottle_sell, County, value = bottle_sold_100) %>% add_col
 df_dollar <- select(df_bottle_sell, County, value = dollar_100) %>% add_column(type = "dollars_in_100")
 df_volume <- select(df_bottle_sell, County, value = volume) %>% add_column(type = "gallons")
 df_b_d_v_for_plot <- rbind(df_bottle, df_dollar, df_volume)
-df_b_d_v_for_plot
-df_dollar
+# df_b_d_v_for_plot
+# df_dollar
 
 ggplot(df_b_d_v_for_plot, aes(x = fct_reorder(County, value), y = value, color = type)) + geom_point()+ coord_flip()
 
 ```
 
-check by alcohol category
+The dataset includes three events (bottles sold in hundreds, sales in hundreds of dollars, and volume sold in gallons) for 99 counties. For demonstration purposes, only the top 30 counties are included in the graph (ordered by the number of bottles sold).
+
+The three events exhibit a positive correlation
 
 ```{r fig.height = 6}
 df_geo_cat <- df_geo%>% group_by(County, `Category Name`) %>% dplyr::summarise(bottle_sold = sum(`Bottles Sold`), dollar_100 = sum(`Sale (Dollars)`)/100, volume = sum(`Volume Sold (Gallons)`))
 #order the dataframe in descending order in the number of bottles sold.
 df_geo_cat_order <- df_geo_cat[order( df_geo_cat[,1], -df_geo_cat[,3] ),]
-df_geo_cat_order
+# df_geo_cat_order
 
 unique_county <- unique(data$County, decreasing=TRUE)
 #in attempt to keep the data clean, we will plot only the top 5 most sold category
@@ -183,10 +185,10 @@ for (x in unique_county) {
 
 #since we only plot the top 30 countries, we must first find the top 30 counties with the most bottle sells.
 df_count <-df_top_cat %>% group_by(County) %>% dplyr::summarise(count = sum(bottle_sold)) %>% slice_max(order_by = `count`, n = 30)
-df_count
+# df_count
 
 unique_county <- unique(df_count$County, decreasing=TRUE)
-unique_county
+# unique_county
 df_stacked_bar <- data.frame()
 for (x in unique_county) {
   temp <- filter(df_geo_cat_order, `County` == x)
@@ -201,6 +203,10 @@ df_stacked_bar$County <- reorder(df_stacked_bar$County, df_stacked_bar$bottle_so
 ggplot(df_stacked_bar, aes(fill= `Category Name`, y=bottle_sold, x=County)) + 
     geom_bar(position="stack", stat="identity") + coord_flip()
 ```
+
+For demonstration purposes, only the top three best-selling alcohol categories for the top 30 counties.
+
+Among 53 different alcohol types, nine appeared to be the top-selling category for the selected counties. In addition, whisky and vodka are frequently among the top-selling categories for the selected counties.
 
 ```{r fig.height = 6}
 # library(GGally)
@@ -219,20 +225,16 @@ ggplot(df_stacked_bar, aes(fill= `Category Name`, y=bottle_sold, x=County)) +
 ```
 
 ```{r}
-df_bottle_sell
+# df_bottle_sell
 
 ```
-
-install.packages('devtools')
-
-install usmap
 
 ```{r}
 library(usmap)
 library(ggplot2)
 #install_dev(“UrbanInstitute/urbnmapr”)
 
-plot_usmap("counties", include = 'IA')
+# plot_usmap("counties", include = 'IA')
 ```
 
 ```{r}
@@ -241,13 +243,13 @@ colnames(df_bottle_sell_vol_para_plot)[1] ="fips"
 
 df_bottle_sell_vol_para_plot[[1]] <- tolower(df_bottle_sell_vol_para_plot[[1]])
 
-print(!is.null(c()))
-fips("IA", county = "pottawattamie")
+# print(!is.null(c()))
+# fips("IA", county = "pottawattamie")
 df_bottle_sell_vol_para_plot <- data.frame(df_bottle_sell_vol_para_plot, stringsAsFactors = FALSE)
 
 #4 wrong county names
 
-df_bottle_sell_vol_para_plot
+# df_bottle_sell_vol_para_plot
 ```
 
 ```{r}
@@ -299,11 +301,17 @@ plot_usmap(data = df_bottle_sell_vol_para_plot, values = "dollar", include = c("
 
 ```
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+The map shows each county's alcohol sales (in dollars) with dark blue being the county with the highest dollar sales.
+
+We notice that counties with higher sales are most likely to include larger cities, suggesting that alcohol sales are proportional to county population.
+
+Since sales are positively correlated to total bottles_sold and volume_sold (shown earlier with Cleveland dot plot), we speculate that the latter two variables are also proportional to county population.
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r cars}
+```{r}
 data <- readr::read_csv("https://raw.githubusercontent.com/RicoXu727/Leetcode-Note/main/2019_Iowa_Liquor_Sales_sample.csv", show_col_types = FALSE)
 ```
 

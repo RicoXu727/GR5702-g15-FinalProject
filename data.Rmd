@@ -12,15 +12,13 @@ Describe any issues / problems with the data, either known or that you discover.
 
 In this [2019 Iowa Liquor Sales dataset](%5Bhttps://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h),](<https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h>),) there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis.
 
-The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. If we encounter some questions, we can simply submit contact request form in Iowa government website. How to use the data? We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. In this particular project, we will discard the identification information such as "Invoice Number", "Store Adress", "Item Number", etc.
+The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. With reference to the purpose of our study, we do not need to use all of the data.
+
+Basic information about the data:
 
 ## Cleaning / transformation
 
-(Describe the process of getting the data into a form in which you could work with it in R if relevant. If your code does not lend itself to being including in the `.Rmd`  file, provide a link to the folder or file(s) that contain(s) that code. (If your data did not require any cleaning or transformation before beginning EDA simply state that.))
-
-(suggested: approximately 1/2 page)
-
-Since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload, we first used Python to randomly sample one-tenth of the data as the research data for this project.
+Since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload and R manipulation, we first used Python to randomly sample one-tenth of the data as the research data for this project.
 
 ```{r}
 library(dplyr)
@@ -42,41 +40,9 @@ drop <- c("Invoice/Item Number","Address", "Store Location", "Volume Sold (Liter
 subdata = mydata[,!(names(mydata) %in% drop)]
 ```
 
-```{r}
-set.seed(10)
-x <- sampledData <- sample(1:nrow(subdata), 1000)
-headdata <- subdata[x, ]
-```
-
-To better present the pattern of missing values on the graph, we rename the column of the data.
-
-```{r}
-colnames(headdata)[2] ="StNum"
-colnames(headdata)[3] ="StName"
-colnames(headdata)[6] ="CoNum"
-colnames(headdata)[8] ="Cat"
-colnames(headdata)[9] ="CatName"
-colnames(headdata)[10] ="VenNum"
-colnames(headdata)[11] ="VenName"
-colnames(headdata)[12] ="ItNum"
-colnames(headdata)[13] ="ItDes"
-colnames(headdata)[15] ="BV"
-colnames(headdata)[16] ="SBC"
-colnames(headdata)[17] ="SBR"
-colnames(headdata)[18] ="BS"
-colnames(headdata)[19] ="Sale"
-colnames(headdata)[20] ="VS"
-# headdata <- headdata %>% 
-#             rename("Store Number" = "StNum","Store Name" = "StName", "County Number" = "CoNum", "Category" = "Cat", "Category Name" = "CatName","Vendor Number" = "VenNum","Vendor Name" = "VenName", "Item Number" = "ItNum","Item Description" = "ItDes","Bottle Volumn (ml)" = "BV", "State Bottle Cost" = "SBC","Bottle Sold" = "BS","Sale (Dollars)" = "Sale","Volume Sold (Gallons)" = "VS")
-```
-
 ## Missing value analysis
 
-Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.
-
-(suggested: 2 graphs plus commentary)
-
-To explore the presence of missing values, we first coun how many missing values exist for each attribute.
+To explore the presence of missing values, we first count how many missing values exist for each column. From the displayed results, we have a small percentage of missing values in our dataset, for example Store Name, Store Number, Date and these columns do not have missing values. The attributes that do have the highest number of values are concentrated in City, Zip Code, County Number, County. And they have the same exact data, which inspired us to explore the pattern of missing values.
 
 ```{r}
 colSums(is.na(subdata)) %>%
@@ -88,7 +54,9 @@ library(naniar)
 gg_miss_upset(subdata, text.scale = 1)
 ```
 
-We directly delete the data with missing values.
+The package naniar provides us with a good visualization method. gg_miss_upset function visually shows us what the missing data values are and which columns have missing values. In addition to that, there are some associated missing values column, connected by a solid black line. There is a clear and strong correlation between the geographical location and the attributes of the city. In City, Zip Code, County Number, County. Once one is missing, all other values are also missing. They are a set of combinations together. In addition, another independent missing value attribute is Category Name, but there are not many, out of 100,000 data, only 115 data do not have this attribute.
+
+Since the absence of a particular attribute in the data is rare, direct deletion does not affect the rendering of the data. We choose to delete the missing value using na.omit() function.
 
 ```{r}
 newdata <- na.omit(subdata)
