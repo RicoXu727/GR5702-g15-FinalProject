@@ -11,3 +11,6 @@ missing-value-analysis
 results
 interactive-component
 conclusion
+peoples-drinking-preferences
+regional-perspective
+timing-perspective

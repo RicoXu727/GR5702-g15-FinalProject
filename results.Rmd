@@ -4,6 +4,8 @@
 
 # Results
 
+## People's drinking preferences
+
 ```{r}
 library(dplyr)
 library(tibble)
@@ -109,6 +111,8 @@ ggplotly(stackg)
 ```
 
 In this graph, American Vodkas and Canadian Whiskies unsurprisingly leads the pack, except that Whiskies Liqueur is the newest popular object and people like to buy them in bulk. The barchat shows, respectively, how many bottles of this wine people buy at a time. In terms of purchase volume, Whiskies Liqueur is the most likely to be bought in groups, people often buy 96 bottles at a time. In general, bulk purchases are not very common, and buying 12 bottles at a time is a favorite.
+
+## Regional perspective
 
 ```{r}
 library(openintro)
@@ -306,6 +310,8 @@ The map shows each county's alcohol sales (in dollars) with dark blue being the 
 We notice that counties with higher sales are most likely to include larger cities, suggesting that alcohol sales are proportional to county population.
 
 Since sales are positively correlated to total bottles_sold and volume_sold (shown earlier with Cleveland dot plot), we speculate that the latter two variables are also proportional to county population.
+
+## Timing perspective
 
 ```{r}
 knitr::opts_chunk$set(echo = FALSE)

@@ -8,7 +8,7 @@ The dataset was collected from grocery stores, liquor stores, convenience stores
 
 Basic information about the data:
 
-We sampled out 100,000 items of data on alcohol sales. Among them, the records with some missing columns are 303, less than 0.3% of the total. A total of 1735 stores contributed data, and the data included 53 types of wine
+We sampled out 100,000 items of data on alcohol sales. Among them, the records with some missing columns are 303, less than 0.3% of the total. A total of 1735 stores contributed data, and the data included 53 types of wine. We have already covered continuous data and categorical data in detail in data availability section.
 
 Describe any issues / problems with the data:
 

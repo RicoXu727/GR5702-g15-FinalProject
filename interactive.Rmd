@@ -3,6 +3,13 @@
 ```{=html}
 <script src="https://d3js.org/d3.v7.js"></script>
 ```
+
+This is the data about mouthly liquor sale data in 2019 Iowa.
+
+First step: click anywhere in graph area, title show up!
+
+Then, you can click any ball at bottom of graph, the ball will transit to specific place!
+
 <svg id="withaxes" width="755" height="800">
 
 </svg>
