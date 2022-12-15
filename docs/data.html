@@ -114,23 +114,20 @@
 <h1><span class="header-section-number">Chapter 3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="sources" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Sources<a href="data.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose. (It’s ok if there some repetition with the previous chapter. Chapter 2 will reflect your thinking at the time of the proposal and Chapter 3 will represent the state of the project when it is complete.)</p>
-<p>Provide some basic information about the data: types of variables, number of records, etc.</p>
-<p>Describe any issues / problems with the data, either known or that you discover.)</p>
-<p>(suggested: approximately 1 page)</p>
-<p>In this <a href="%5Bhttps://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h">2019 Iowa Liquor Sales dataset</a>,](<a href="https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h" class="uri">https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h</a>),) there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis.</p>
+<p>In this <a href="https://data.iowa.gov/Sales-Distribution/2019-Iowa-Liquor-Sales/38x4-vs5h">2019 Iowa Liquor Sales dataset</a>, there are very few missing values. There are as many as 24 attributes, which include Date of consumption, Store Name, Category Name, Vendor name and more, detailing every single alcohol consumption. In addition, this dataset is rich in Catigorical Data as well as Numerical Data, and we can use as many kinds of charts as possible to explore the data in the subsequent analysis.</p>
 <p>The dataset was collected from grocery stores, liquor stores, convenience stores and so on which has Class E liquor license. We can export it as csv file and import to Rstudio. The dataset consists of 2.38 million points with 24 columns. With reference to the purpose of our study, we do not need to use all of the data.</p>
 <p>Basic information about the data:</p>
+<p>We sampled out 100,000 items of data on alcohol sales. Among them, the records with some missing columns are 303, less than 0.3% of the total. A total of 1735 stores contributed data, and the data included 53 types of wine</p>
+<p>Describe any issues / problems with the data:</p>
+<p>We did find some data issues, for example, all Sunday sales data was missing from our dataset. Outside of the initial time, a portion of the Saturday data was also missing. This part of missing is not shown in the missing value analysis because a whole row of data is not recorded. The absence of this part of the data slightly affected our analysis. In the time series analysis part, we were able to find that the sales figures were higher in the second half of the year, and one of the factors was the presence of Saturday data in the second half of the year. To avoid this issue from affecting our exploration of data periodicity, we choose pin Friday data to explore whether the data are cyclical.</p>
 </div>
 <div id="cleaning-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload and R manipulation, we first used Python to randomly sample one-tenth of the data as the research data for this project.</p>
-<p>Second, we eliminated some redundant column data according to the need of the study.</p>
+<p>Originally, raw data contains 2380345 rows, since the source data file size is too large, the source file is over 500MB, which exceeds the limit of GitHub upload and R manipulation, we first used Python to randomly sample 100000 data as the research data for this project.</p>
+<p>Then, to ensure as efficient a run as possible in the study, we removed some columns that were not very relevant to the research, or that were related to other columns. Like Store Location, which accurate to latitude and longitude in raw dataset. We do not think we need to include Store Location since the Zip code variable seems more usable. Similarly, we delete address variable. AS for Invoice/Item Number, it is just the id of each flow, and we think that the multivariate afterwards can avoid duplication.</p>
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Describe any patterns you discover in missing values. If no values are missing, graphs should still be included showing that.</p>
-<p>(suggested: 2 graphs plus commentary)</p>
 <p>To explore the presence of missing values, we first count how many missing values exist for each column. From the displayed results, we have a small percentage of missing values in our dataset, for example Store Name, Store Number, Date and these columns do not have missing values. The attributes that do have the highest number of values are concentrated in City, Zip Code, County Number, County. And they have the same exact data, which inspired us to explore the pattern of missing values.</p>
 <pre><code>##                  City              Zip Code         County Number 
 ##                   188                   188                   188 
@@ -147,7 +144,8 @@
 ##    Bottle Volume (ml)        Sale (Dollars) 
 ##                     0                     0</code></pre>
 <p><img src="GR5702---g15---Final-Project_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>We directly delete the data with missing values.</p>
+<p>The package naniar provides us with a good visualization method. gg_miss_upset function visually shows us what the missing data values are and which columns have missing values. In addition to that, there are some associated missing values column, connected by a solid black line. There is a clear and strong correlation between the geographical location and the attributes of the city. In City, Zip Code, County Number, County. Once one is missing, all other values are also missing. They are a set of combinations together. In addition, another independent missing value attribute is Category Name, but there are not many, out of 100,000 data, only 115 data do not have this attribute.</p>
+<p>Since the absence of a particular attribute in the data is rare, direct deletion does not affect the rendering of the data. We choose to delete the missing value using na.omit() function.</p>
 
 </div>
 </div>

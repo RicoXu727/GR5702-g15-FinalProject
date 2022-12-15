@@ -351,17 +351,23 @@ g +
   geom_smooth(color = "blue", se = FALSE)
 ```
 
+There is a slight increase in the total amount of bottles sold in all categories of alcohol from January to December in 2019.
+
+The daily amount of bottles sold mainly clusters between 3000 and 5000.
+
+The plot shows there are several low values and one zero in daily amount of bottles sold. We speculate that the data is not complete these days.
+
 ```{r}
-library(plotly)
-
-p <- plot_ly(
-  df_bottles, x = ~date_unique, y = ~total_bottles,
-  type = "scatter",
-  mode = "line+markers",
-  hoverinfo = "text"
-)
-
-p
+# library(plotly)
+# 
+# p <- plot_ly(
+#   df_bottles, x = ~date_unique, y = ~total_bottles,
+#   type = "scatter",
+#   mode = "line+markers",
+#   hoverinfo = "text"
+# )
+# 
+# p
 ```
 
 ```{r}
@@ -399,6 +405,12 @@ ggplot(df_bottles_month, aes(month, total_bottles, group=1)) +
 
 ```
 
+The plot shows that people in Iowa do not purchase as much alcohol in the first quarter in 2019 as they do in the other quarters.
+
+There is a significant increase in monthly bottles sold from March to April in 2019. The increase is approximately 22500 bottles.
+
+It is initially assumed that the consumption of alcohol during the first quarter of the year is higher since the weather is cold, which contradicts what the data illustrates. We speculate the reason is that people tend not to go out as often due to the cold and snowy weather.
+
 ```{r}
 g <- ggplot(df_bottles, aes(date_unique, total_bottles)) + geom_line() +
   ggtitle("Bottles sold on Fridays") +
@@ -410,6 +422,10 @@ g + geom_point(data = friday, aes(date_unique, total_bottles),
                color = "deeppink")
 ```
 
+In the first quarter of 2019, the daily bottles sold on Fridays cluster near 2000. After the first quarter, the daily bottles sold on Fridays cluster near 5000.
+
+In the first quarter, the daily bottles sold on Fridays are often at the lower end among other days of the week. After the first quarter, it gradually shifts to a higher position.
+
 ```{r}
 ggplot(df_bottles, aes(date_unique, total_bottles)) +
   geom_line() +
@@ -418,6 +434,10 @@ ggplot(df_bottles, aes(date_unique, total_bottles)) +
   labs (x = "date", y = "bottles")
 
 ```
+
+The data set does not include any Sunday data. Saturday data is partially included, and it is not possible to draw informative conclusions from incomplete data.
+
+There is no observable difference in the trend in alcohol sales among weekdays.
 
 ```{r}
 df_december <- filter(df_bottles, month == "December")
@@ -454,36 +474,40 @@ g + annotate("rect",
 
 ```
 
+The purple region highlights the bottles sold during Thanksgiving Holiday and the green region highlights the bottles sold during Christmas.
+
+However, the sales of alcohol during the holiday seasons is not as high as expected since not all the stores open during holidays and people tend to prepare alcohol before holidays.
+
 ```{r}
-mon <- c()
-
-for (i in 1:length(date_in_date)) {
-  mon <- append(mon, months(date_in_date[i]))
-}
-
-data_new <- cbind(data_new, "month" = c(mon))
-
-cate <- unique(data_new$`Category Name`)
-
-df_para <- data.frame(
-  "category" = cate
-)
-
-
-for (i in 1:12) {
-  mon <- c()
-  df_mon <- filter(data_new, month == month.name[i])
-  for (j in 1:length(cate)) {
-  index <- df_mon$`Category Name` == cate[j]
-  total <- sum(df_mon$`Bottles Sold`[index], na.rm = TRUE)
-  mon <- append(mon,total)
-  }
-  df_para <- cbind(df_para, mon)
-}
+# mon <- c()
+# 
+# for (i in 1:length(date_in_date)) {
+#   mon <- append(mon, months(date_in_date[i]))
+# }
+# 
+# data_new <- cbind(data_new, "month" = c(mon))
+# 
+# cate <- unique(data_new$`Category Name`)
+# 
+# df_para <- data.frame(
+#   "category" = cate
+# )
+# 
+# 
+# for (i in 1:12) {
+#   mon <- c()
+#   df_mon <- filter(data_new, month == month.name[i])
+#   for (j in 1:length(cate)) {
+#   index <- df_mon$`Category Name` == cate[j]
+#   total <- sum(df_mon$`Bottles Sold`[index], na.rm = TRUE)
+#   mon <- append(mon,total)
+#   }
+#   df_para <- cbind(df_para, mon)
+# }
 ```
 
 ```{r}
-library(GGally)
-colnames(df_para) <- c("category", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-ggparcoord(df_para)
+# library(GGally)
+# colnames(df_para) <- c("category", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+# ggparcoord(df_para)
 ```
